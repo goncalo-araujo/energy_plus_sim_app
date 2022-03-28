@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[41]:
+# In[1]:
 
 
 import streamlit as st
@@ -16,27 +16,27 @@ import numpy as np
 
 
 
-# In[42]:
+# In[2]:
 
 
 X = pd.read_pickle("x1.pkl")
 y = pd.read_pickle("y1.pkl")
 
 
-# In[44]:
+# In[3]:
 
 
 X.to_pickle("x11.pkl", protocol = 4)
 y.to_pickle("y11.pkl", protocol = 4)
 
 
-# In[36]:
+# In[4]:
 
 
 #X.columns
 
 
-# In[37]:
+# In[5]:
 
 
 #x["epoch"].unique()
@@ -48,7 +48,7 @@ y.to_pickle("y11.pkl", protocol = 4)
 
 
 
-# In[38]:
+# In[6]:
 
 
 def period_to_numeric(a):
@@ -74,18 +74,21 @@ def period_to_numeric(a):
         return 9
 
 
-# In[6]:
+# In[17]:
 
 
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
 model = RandomForestRegressor()
-@st.cache
-def model_fit():
-    return model.fit(X, y)
-model_fit()
+model.fit(X, y)
 
 
-# In[9]:
+# In[16]:
+
+
+
+
+
+# In[8]:
 
 
 st.write("""
@@ -96,19 +99,19 @@ This app predicts the **energy consumption** of your house/building in Lisbon!
 st.write("---")
 
 
-# In[46]:
+# In[9]:
 
 
 X.rot.min()
 
 
-# In[47]:
+# In[10]:
 
 
 X.rot.max()
 
 
-# In[14]:
+# In[11]:
 
 
 # Sidebar
@@ -137,19 +140,19 @@ def user_input_features():
 df = user_input_features()
 
 
-# In[15]:
+# In[12]:
 
 
 df
 
 
-# In[16]:
+# In[13]:
 
 
-prediction = model.predict(df)
+prediction = model_predict(df)
 
 
-# In[18]:
+# In[ ]:
 
 
 st.header('Prediction of Energy Consumption in kWh/m2 and Euros')
@@ -158,7 +161,7 @@ st.write(round(prediction[0]*0.15252*df["Área útil"][0], 2), "€")
 st.write('---')
 
 
-# In[33]:
+# In[ ]:
 
 
 st.header('Specify Desired upgrade')
