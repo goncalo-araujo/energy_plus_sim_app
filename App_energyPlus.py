@@ -82,7 +82,7 @@ model = RandomForestRegressor()
 @st.cache
 def model_fit():
     model.fit(X, y)
-model_train()
+model_fit()
 
 
 # In[9]:
