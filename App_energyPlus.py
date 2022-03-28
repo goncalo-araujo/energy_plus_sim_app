@@ -1,29 +1,30 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import streamlit as st
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt
+import numpy as np
 
 
-# In[14]:
+# In[2]:
 
 
 X = pd.read_pickle("x1.pkl")
 y = pd.read_pickle("y1.pkl")
 
 
-# In[15]:
+# In[3]:
 
 
 #X.columns
 
 
-# In[16]:
+# In[4]:
 
 
 #x["epoch"].unique()
@@ -35,7 +36,7 @@ y = pd.read_pickle("y1.pkl")
 
 
 
-# In[17]:
+# In[5]:
 
 
 def period_to_numeric(a):
@@ -61,7 +62,7 @@ def period_to_numeric(a):
         return 9
 
 
-# In[19]:
+# In[6]:
 
 
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
@@ -69,7 +70,31 @@ model = RandomForestRegressor()
 model.fit(X, y)
 
 
-# In[20]:
+# In[7]:
+
+
+from sklearn.linear_model import Ridge,LinearRegression
+ri = Ridge()
+lm =LinearRegression(n_jobs=-1)
+
+
+# In[8]:
+
+
+# importing libraries for polynomial transform
+from sklearn.preprocessing import PolynomialFeatures
+# for creating pipeline
+from sklearn.pipeline import Pipeline, make_pipeline
+#creating pipeline and fitting it on data
+Input_lm =[('polynomial',PolynomialFeatures(degree=4)),('modal',lm)]
+Input_ri =[('polynomial',PolynomialFeatures(degree=4)),('modal',ri)]
+pipe_lm=Pipeline(Input_lm)
+pipe_ri=Pipeline(Input_ri)
+pipe_lm.fit(X, y)
+pipe_ri.fit(X, y)
+
+
+# In[9]:
 
 
 st.write("""
@@ -80,7 +105,7 @@ This app predicts the **energy consumption** of your house/building in Lisbon!
 st.write("---")
 
 
-# In[37]:
+# In[14]:
 
 
 # Sidebar
@@ -100,34 +125,28 @@ def user_input_features():
             "Área útil": f_area,
             "Rácio de envidraçado": wwr,
             "Ano de Construção":period_to_numeric(Period),
-            "Wall": 1,
-            "Roof": 1,
-            "Floor": 1}
+            "Solução Construtiva - Parede": 1,
+            "Solução Construtiva - Cobertura": 1,
+            "Solução Construtiva - Pavimento": 1}
     features = pd.DataFrame(data, index=[0])
     return features
 
 df = user_input_features()
 
 
-# In[38]:
+# In[15]:
 
 
 df
 
 
-# In[39]:
+# In[16]:
 
 
 prediction = model.predict(df)
 
 
-# In[ ]:
-
-
-#prediction
-
-
-# In[31]:
+# In[18]:
 
 
 st.header('Prediction of Energy Consumption in kWh/m2 and Euros')
@@ -136,44 +155,11 @@ st.write(round(prediction[0]*0.15252*df["Área útil"][0], 2), "€")
 st.write('---')
 
 
-# In[32]:
+# In[33]:
 
 
 st.header('Specify Desired upgrade')
-up = st.selectbox("Tipo de renovação", ["Paredes", "Janelas", "Águas quentes e sanitárias"])
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-# # Explaining the model's predictions using SHAP values
-# # https://github.com/slundberg/shap
-# explainer = shap.TreeExplainer(model)
-# shap_values = explainer.shap_values(X)
-
-
-# In[ ]:
-
-
-# st.header('Feature Importance')
-# plt.title('Feature importance based on SHAP values')
-# shap.summary_plot(shap_values, X)
-# st.pyplot(bbox_inches='tight')
-# st.write('---')
-
-
-# In[ ]:
-
-
-# plt.title('Feature importance based on SHAP values (Bar)')
-# shap.summary_plot(shap_values, X, plot_type="bar")
-# st.pyplot(bbox_inches='tight')
+st.checkbox("Tipo de renovação", ["Paredes", "Janelas", "Águas quentes e sanitárias"])
 
 
 # In[ ]:
