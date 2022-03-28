@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[41]:
 
 
 import streamlit as st
@@ -10,20 +10,33 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# In[2]:
+# In[ ]:
+
+
+
+
+
+# In[42]:
 
 
 X = pd.read_pickle("x1.pkl")
 y = pd.read_pickle("y1.pkl")
 
 
-# In[3]:
+# In[44]:
+
+
+X.to_pickle("x11.pkl", protocol = 4)
+y.to_pickle("y11.pkl", protocol = 4)
+
+
+# In[36]:
 
 
 #X.columns
 
 
-# In[4]:
+# In[37]:
 
 
 #x["epoch"].unique()
@@ -35,7 +48,7 @@ y = pd.read_pickle("y1.pkl")
 
 
 
-# In[5]:
+# In[38]:
 
 
 def period_to_numeric(a):
@@ -69,30 +82,6 @@ model = RandomForestRegressor()
 model.fit(X, y)
 
 
-# In[7]:
-
-
-from sklearn.linear_model import Ridge,LinearRegression
-ri = Ridge()
-lm =LinearRegression(n_jobs=-1)
-
-
-# In[8]:
-
-
-# importing libraries for polynomial transform
-from sklearn.preprocessing import PolynomialFeatures
-# for creating pipeline
-from sklearn.pipeline import Pipeline, make_pipeline
-#creating pipeline and fitting it on data
-Input_lm =[('polynomial',PolynomialFeatures(degree=4)),('modal',lm)]
-Input_ri =[('polynomial',PolynomialFeatures(degree=4)),('modal',ri)]
-pipe_lm=Pipeline(Input_lm)
-pipe_ri=Pipeline(Input_ri)
-pipe_lm.fit(X, y)
-pipe_ri.fit(X, y)
-
-
 # In[9]:
 
 
@@ -102,6 +91,18 @@ st.write("""
 This app predicts the **energy consumption** of your house/building in Lisbon!
 """)
 st.write("---")
+
+
+# In[46]:
+
+
+X.rot.min()
+
+
+# In[47]:
+
+
+X.rot.max()
 
 
 # In[14]:
@@ -117,7 +118,7 @@ def user_input_features():
     prop = st.sidebar.slider('Proporção', 1.00, 5.00, 2.00, 0.01)
     N_floors = st.sidebar.slider('Número de pisos', round(X.nfloor.min()), round(X.nfloor.max()), round(X.nfloor.mean()))
     rot = st.sidebar.slider('Orientação radianos em relação a Este', round(X.rot.min(), 2), round(X.rot.max(), 2), round(X.rot.mean(), 2))
-    wwr = st.sidebar.slider('Rácio de envidraçado', round(X.wwr.min(), 2), round(X.wwr.max(), 2), round(X.wwr.mean(), 2))
+    wwr = st.sidebar.slider('Rácio de envidraçado', round(X.wwr.min(), 2), round(X.wwr.max(), 2), 0)
     data = {"Número de pisos": N_floors,
             "Proporção rectangular do apartamento": prop,
             "Orientação radianos em relação a Este": rot,
