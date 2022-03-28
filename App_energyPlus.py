@@ -149,7 +149,7 @@ df
 # In[13]:
 
 
-prediction = model_predict(df)
+prediction = model.predict(df)
 
 
 # In[ ]:
