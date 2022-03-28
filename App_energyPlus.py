@@ -117,8 +117,8 @@ def user_input_features():
     f_area = st.sidebar.slider('Área útil', 50, 800, 100)
     prop = st.sidebar.slider('Proporção', 1.00, 5.00, 2.00, 0.01)
     N_floors = st.sidebar.slider('Número de pisos', round(X.nfloor.min()), round(X.nfloor.max()), round(X.nfloor.mean()))
-    rot = st.sidebar.slider('Orientação radianos em relação a Este', round(X.rot.min(), 2), round(X.rot.max(), 2), round(X.rot.mean(), 2))
-    wwr = st.sidebar.slider('Rácio de envidraçado', 0, 3.14, 0)
+    rot = st.sidebar.slider('Orientação radianos em relação a Este', round(X.rot.min(), 2), round(X.rot.max(), 2), 0.00)
+    wwr = st.sidebar.slider('Rácio de envidraçado', round(X.wwr.min(), 2), round(X.wwr.max(), 2), round(X.wwr.mean(), 2))
     data = {"Número de pisos": N_floors,
             "Proporção rectangular do apartamento": prop,
             "Orientação radianos em relação a Este": rot,
