@@ -77,6 +77,7 @@ def period_to_numeric(a):
 # In[6]:
 
 
+@st.cache
 from sklearn.ensemble import ExtraTreesRegressor, RandomForestRegressor
 model = RandomForestRegressor()
 model.fit(X, y)
