@@ -84,8 +84,7 @@ st.write("""
 # Building Energy Simulation and Optimization for Lisbon, Portugal
 
 This web app deploys a surrogate model developed with the EnergyPlus tool. 
-The model can be used to predict the Annual energy use of a list of buildings and optimize a building using the Genetic algorithm to minimize Annual Loads.
-The user can select the chosen design variables.
+The model can be used to predict the Annual energy use of a list of buildings and optimize a building's variables using the Genetic algorithm to minimize Annual Loads.
 """)
 
 st.write("---")
