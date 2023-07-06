@@ -1,6 +1,7 @@
-streamlit == 1.2.0
-pandas == 1.2.4
+streamlit == 1.22.*
+pandas
 matplotlib == 3.3.4
 scikit-learn == 1.0.2
 numpy == 1.20.1
-plotly == 5.6.0
+plotly==5.6.0
+Platypus-Opt==1.0.4
