@@ -104,7 +104,8 @@ c_tech.columns = ["Number of floors",
                   "Orientation (Radians)", 
                   "Floor area (sqm)", 
                   "Glazing ratio",
-                  "Construction typology", "Energy"]
+                  "Construction typology", 
+                  "Energy (kWh/sqm)"]
 
 
 # In[10]:
@@ -120,7 +121,7 @@ st.write("Below you can download the Example upload file:")
 def convert_example(df):
     return df.to_csv().encode('utf-8')
 
-example = convert_example(c_tech.drop("Energy", axis=1))
+example = convert_example(c_tech.drop("Energy (kWh/sqm)", axis=1))
 
 st.download_button(
     label="Download sample data as CSV",
@@ -199,7 +200,7 @@ upload = st.file_uploader("Input CSV file with all the buildings you want to tes
 if upload != None:
     preds = et_r.predict(pd.read_csv(upload).drop("Unnamed: 0", axis=1))
 else:
-    preds = et_r.predict(c_tech.drop("Energy", axis=1))
+    preds = et_r.predict(c_tech.drop("Energy (kWh/sqm)", axis=1))
 
 
 # In[21]:
@@ -235,7 +236,7 @@ st.write("In this section you can select the design variables and their boundari
 
 from platypus import *
 #problem_types = [nfloor, prop, rot, area, wwr, mat]
-cols = c_tech.drop(["Energy"], axis=1).columns.values
+cols = c_tech.drop(["Energy (kWh/sqm)"], axis=1).columns.values
 
 
 # In[149]:
@@ -349,7 +350,7 @@ def buildings_opt(x):
         uncoded_mat = le.inverse_transform([x[len(platypus_vars)-1]])[0]
         
     df = pd.DataFrame([problem])
-    df.columns = c_tech.drop("Energy", axis=1).columns
+    df.columns = c_tech.drop("Energy (kWh/sqm)", axis=1).columns
     pred = et_r.predict(df)[0]
     return [pred]
 
@@ -392,7 +393,7 @@ if start_opt == True:
         global_arr.append(s.objectives[0])
     final = np.array(global_arr).reshape(len(algorithm.result), len(platypus_vars)+1)
     final_df = pd.DataFrame(final)
-    final_df.columns = np.concatenate(([key for key in problem_types.keys() if "Real" in str(problem_types[key]) or "Integer" in str(problem_types[key])], ["Energy"]))
+    final_df.columns = np.concatenate(([key for key in problem_types.keys() if "Real" in str(problem_types[key]) or "Integer" in str(problem_types[key])], ["Energy (kWh/sqm)"]))
     if "Construction typology" in vars_user:
         final_df["mat"] = final_df["mat"].apply(lambda x: le.inverse_transform([int(x)])[0])
 
@@ -423,7 +424,7 @@ if start_opt == True:
 
 if start_opt == True:
     import plotly.express as px
-    fig = px.scatter(final_df, x=final_df.index, y="Energy", color = "Energy", color_continuous_scale=px.colors.sequential.GnBu_r)
+    fig = px.scatter(final_df, x=final_df.index, y="Energy (kWh/sqm)", color = "Energy (kWh/sqm)", color_continuous_scale=px.colors.sequential.GnBu_r)
     st.plotly_chart(fig)
     #fig.show()
 
